@@ -43,6 +43,8 @@ abstract contract Signatures is ISignatures, PolyFactoryHelper {
             return verifyEOASignature(signer, associated, structHash, signature);
         } else if (signatureType == SignatureType.POLY_GNOSIS_SAFE) {
             return verifyPolySafeSignature(signer, associated, structHash, signature);
+        } else if (signatureType == SignatureType.POLY_1271) {
+            return verifyPoly1271Signature(signer, structHash, signature);
         } else {
             // POLY_PROXY
             return verifyPolyProxySignature(signer, associated, structHash, signature);
@@ -108,5 +110,19 @@ abstract contract Signatures is ISignatures, PolyFactoryHelper {
         returns (bool)
     {
         return verifyECDSASignature(signer, hash, signature) && getSafeAddress(signer) == safeAddress;
+    }
+
+    /// @notice Verifies a signature signed by a smart contract
+    /// @param contractAddress  - Address of the smart contract
+    /// @param hash             - Hash of the struct being verified
+    /// @param signature        - Signature to be verified
+    function verifyPoly1271Signature(address contractAddress, bytes32 hash, bytes memory signature) internal view returns (bool) {
+        (bool success, bytes memory result) = contractAddress.staticcall(
+            abi.encodeWithSelector(IERC1271.isValidSignature.selector, hash, signature)
+        );
+
+        return (success &&
+            result.length >= 32 &&
+            abi.decode(result, (bytes32)) == bytes32(IERC1271.isValidSignature.selector));
     }
 }
