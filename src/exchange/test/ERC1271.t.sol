@@ -1,17 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity <0.9.0;
 
-import { ERC1271Mock } from "dev/mocks/ERC1271Mock.sol";
-
 import { BaseExchangeTest } from "exchange/test/BaseExchangeTest.sol";
 import { Order, Side, SignatureType } from "exchange/libraries/OrderStructs.sol";
 
-contract SignaturesTest is BaseExchangeTest {
-
-    function test_validateOrderSignature() public {
-        Order memory order = _createAndSignOrder(bobPK, yes, 50_000_000, 100_000_000, Side.BUY);
-        exchange.validateOrderSignature(exchange.hashOrder(order), order);
-    }
+contract ERC1271SignatureTest is BaseExchangeTest {
 
     function test_validate1271Signature() public {
         Order memory order =
