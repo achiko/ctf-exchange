@@ -5,7 +5,6 @@ import { BaseExchangeTest } from "exchange/test/BaseExchangeTest.sol";
 import { Order, Side, SignatureType } from "exchange/libraries/OrderStructs.sol";
 
 contract ERC1271SignatureTest is BaseExchangeTest {
-
     function test_validate1271Signature() public {
         Order memory order =
             _createAndSign1271Order(carlaPK, address(contractWallet), yes, 50_000_000, 100_000_000, Side.BUY);

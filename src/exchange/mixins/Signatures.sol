@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import { IERC1271 } from "openzeppelin-contracts/interfaces/IERC1271.sol";
+import { SignatureCheckerLib } from "solady/utils/SignatureCheckerLib.sol";
 import { ECDSA } from "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 
 import { SignatureType, Order } from "../libraries/OrderStructs.sol";
@@ -126,12 +126,7 @@ abstract contract Signatures is ISignatures, PolyFactoryHelper {
         view
         returns (bool)
     {
-        (bool success, bytes memory result) =
-            contractAddress.staticcall(abi.encodeWithSelector(IERC1271.isValidSignature.selector, hash, signature));
-
-        return (
-            success && result.length >= 32
-                && abi.decode(result, (bytes32)) == bytes32(IERC1271.isValidSignature.selector)
-        );
+        return contractAddress.code.length > 0
+            && SignatureCheckerLib.isValidSignatureNow(contractAddress, hash, signature);
     }
 }
