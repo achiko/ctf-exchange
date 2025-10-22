@@ -30,7 +30,7 @@ abstract contract Signatures is ISignatures, PolyFactoryHelper {
     ///                           For signature type EOA, this MUST be the same as the signer address.
     ///                           For signature types POLY_PROXY and POLY_GNOSIS_SAFE, this is the address of the proxy
     ///                           or the safe
-    //                            For signature type POLY_1271, this is the address of the contract address
+    ///                           For signature type POLY_1271, this is the address of the contract
     /// @param structHash       - The hash of the struct being verified
     /// @param signature        - The signature to be verified
     /// @param signatureType    - The signature type to be verified
