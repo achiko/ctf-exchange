@@ -49,7 +49,7 @@ abstract contract Signatures is ISignatures, PolyFactoryHelper {
             return verifyPolySafeSignature(signer, associated, structHash, signature);
         } else if (signatureType == SignatureType.POLY_1271) {
             // POLY_1271
-            return verifyPoly1271Signature(signer, structHash, signature);
+            return verifyPoly1271Signature(associated, structHash, signature);
         } else {
             // POLY_PROXY
             return verifyPolyProxySignature(signer, associated, structHash, signature);
@@ -118,7 +118,7 @@ abstract contract Signatures is ISignatures, PolyFactoryHelper {
     }
 
     /// @notice Verifies a signature signed by a smart contract
-    /// @param contractAddress  - Address of the smart contract
+    /// @param contractAddress  - Address of the 1271 smart contract
     /// @param hash             - Hash of the struct being verified
     /// @param signature        - Signature to be verified
     function verifyPoly1271Signature(address contractAddress, bytes32 hash, bytes memory signature)
