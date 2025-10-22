@@ -117,8 +117,6 @@ contract BaseExchangeTest is TestHelper, IAuthEE, IFeesEE, IRegistryEE, IPausabl
         returns (Order memory)
     {
         Order memory order = _createOrder(wallet, tokenId, makerAmount, takerAmount, side);
-        order.signer = wallet;
-        order.maker = wallet;
         order.signatureType = SignatureType.POLY_1271;
         order.signature = _signMessage(signerPk, exchange.hashOrder(order));
         return order;
